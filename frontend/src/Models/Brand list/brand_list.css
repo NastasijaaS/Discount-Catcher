@@ -1,0 +1,29 @@
+.brand_list_container {
+    width: 100%;
+    height: 100%;
+
+    overflow-y: scroll;
+}
+
+.brand_list_container::-webkit-scrollbar {
+    display: none;
+}
+
+.brand_list_main {
+    
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    width: 100%;
+    height: 100%;
+
+    gap: 2rem;
+
+    flex-wrap: wrap;
+}
+
+.brand_list_main::-webkit-scrollbar {
+    display: none;
+}

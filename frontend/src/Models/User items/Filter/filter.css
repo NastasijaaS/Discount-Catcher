@@ -1,0 +1,35 @@
+.filter_container_cnt {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+
+    margin-top: 0.5rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    /* padding: 0.5rem; */
+}
+
+.filter_main {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    gap: 3rem;
+    width: 100%;
+}
+
+.filter_button {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.4rem;
+    background-color: #7A77E1;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    border: none;
+    padding: 0.4rem 0.6rem;
+}

@@ -1,0 +1,129 @@
+.product_info_cont {
+    /* border: 1px solid red; */
+    position: relative;
+
+    width: 70%;
+    margin-left: 15%;
+    height: 70vh;
+
+    /* border-radius: 0.45rem; */
+
+    margin-top: 3rem;
+}
+
+.product_info_cont_div {
+
+    border: 1px solid black;
+    height: 100%;
+    overflow: none;
+    background-color: #9895E8;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 0.75rem;
+
+    gap: 5rem;
+
+}
+
+.product_info {
+    /* border: 1px solid red; */
+    width: 35%;
+    height: 80%;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+
+    background-color: #a5a3e5;
+    border-radius: 0.5rem;
+}
+
+.product_image {
+    height: 50%;
+    margin-bottom: 1rem;
+}
+
+.product_data_cont {
+    /* margin-bottom: 1.5rem; */
+    padding: 0rem 1rem 0rem 1rem;
+}
+
+.product_data_cont > * {
+    font-weight: 500;
+    font-size: 1.175rem;
+}
+
+.product_prices {
+    /* border: 1px solid goldenrod; */
+    width: 35%;
+    height: 80% !important;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+
+    overflow-y: scroll;
+
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+
+    gap: 0.75rem;
+
+    background-color: #a5a3e5;
+    border-radius: 0.5rem;
+
+}
+
+.product_price_cont {
+    /* border: 1px solid lime; */
+    width: 70%;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.product_store_name {
+    font-size: 1.15rem;
+    font-weight: 600;
+}
+
+.exit_button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+
+    padding: 0.5rem;
+
+    border: none;
+    border-radius: 1rem;
+    background: none;
+
+    font-size: 1rem;
+    font-weight: 700;
+
+    cursor: pointer;
+    transition: 0.4s ease-in-out;
+}
+
+.exit_button:hover{
+    scale: 1.4;
+}
+
+.product_prices::-webkit-scrollbar{
+    display: none;
+}
+
+.product_store_price {
+    font-style: italic;
+}
