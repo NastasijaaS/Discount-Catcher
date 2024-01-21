@@ -1,18 +1,3 @@
-// module.exports = {
-//     name: {
-//         type: 'string',
-//         unique: 'true'
-//     },
-//     products: {
-//         type: 'relationships'
-//     },
-//     stores: {
-//         type: 'relationships'
-//     },
-//     discount: {
-//         type: 'number'
-//     }
-// }
 
 export const brand = class Brand {
     constructor(name, products, stores) {

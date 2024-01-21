@@ -28,11 +28,17 @@ export const createLocation = async (req, res) => {
 export const getAllLocations = async (req, res) => {
     try {
 
-        let response = null
+        let response = []
         
         const session = await create_session()
         await session.run('MATCH (l:Location) RETURN l LIMIT 25').then(r => {
-            response = r.records.map(x => { return x.get('l').properties })
+            // response = r.records.map(x => { return x.get('l').properties })
+            r.records.map(x => {
+                let location_obj = x.get('l').properties
+                location_obj.location_id = x.get('l').identity['low']
+
+                response.push(location_obj)
+            })
             session.close()
         })
         if (response.length != 0)

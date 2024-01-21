@@ -43,6 +43,7 @@ export default function Product_info({product_data_info}) {
                 </div>
 
                 <div className="product_prices">
+                    <label className="label_prices" >Cene: </label>
                     {
                         (loading) ? (
                             <>

@@ -1,9 +1,3 @@
-// module.exports = {
-//     name: {
-//         type: 'string',
-//         unique: 'true'
-//     }
-// }
 
 export const location = class Location {
     constructor(name) {

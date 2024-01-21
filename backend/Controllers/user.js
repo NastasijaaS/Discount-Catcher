@@ -2,7 +2,8 @@ import bcrypt from 'bcrypt'
 import { create_session } from '../database.js'
 
 import { user } from '../Models/user.js';
-//import { userRepository } from '../Models/Redis/user.js';
+import { userRepository } from '../Models/Redis/user.js';
+import { redis_client, connection } from '../database.js'
 // import { product } from '../Models/product.js';
 
 export const createUser = async (req, res) => {
@@ -12,7 +13,7 @@ export const createUser = async (req, res) => {
         //const salt = await bcrypt.genSalt(10)
         //const hashedPassword = await bcrypt.hash(password, salt);
 
-        const newUser = new user(other.name, other.last_name, other.email, password, null, null, null);
+        const newUser = new user(other.name, other.last_name, other.email, password, null, null, null, false);
         
         let response = null;
 
@@ -88,22 +89,26 @@ export const loginUser = async (req, res) => {
         let found_user = null
         let session = await create_session()
         await session.run('MATCH (u:User) WHERE u.email = \'' + email + '\' AND u.password= \''+ password +'\' RETURN u AS user').then(r => {
-            found_user = r.records[0].get('user').identity['low']
+            found_user = r.records[0].get('user').properties
+            found_user.user_id = r.records[0].get('user').identity['low']
             session.close()
         }).catch(() => {
             session.close()
         })
 
-        console.log('nesto21')
+        // console.log('nesto21')
 
         let product_list = []
         session = await create_session()
-        await session.run('MATCH (u:User)-[r:INTERESTED_IN_PRODUCT]->(p:Product) WHERE ID(u) = ' + found_user + ' RETURN p AS product').then(r => {
+        await session.run('MATCH (u:User)-[r:INTERESTED_IN_PRODUCT]->(p:Product) WHERE ID(u) = ' + found_user.user_id + ' RETURN p AS product').then(r => {
             r.records.map(x => {
                 product_list.push(x.get('product').identity['low'])
+
             })
             session.close()
         })
+
+        // FIXME: store list & brand list1
 
         if(found_user)
             return res.status(200).json({found_user, product_list});
@@ -398,7 +403,10 @@ export const getAllInterestedInProducts = async (req, res) => {
 
         const user_id = req.body['user_id']
         // const product_id = req.body['product_id']
-
+        // console.log('ovde123')
+        // let message = JSON.stringify({data: "Message 123", tag: [11]})
+        // await connection.publish("app:customer", message)
+        // console.log('ovde123')
         // Pribavljamo korisnika:
 
         let result1 = null
@@ -506,5 +514,53 @@ export const getAllInterestedInBrand = async (req, res) => {
 
     } catch(err) {
         return res.status(500).json(err);
+    }
+}
+
+export const userMessages = async (req, res) => {
+    try {
+        const user_id = req.body['user_id']
+        let response = []
+        
+        let session = await create_session();
+        await session.run(`MATCH (u:User)-[r:USER_MESSAGE]->(m:Message) WHERE ID(u) = ${user_id} RETURN r AS veza, m AS poruka`).then(r => {
+
+            r.records.map(x => {
+                let message_obj = x.get('poruka').properties
+                message_obj.status = x.get('veza').properties['read']
+                message_obj.message_id = x.get('veza').identity['low']
+
+                // console.log(x.get('veza').properties)
+
+                response.push(message_obj)
+            })
+
+            session.close();
+        })
+
+        if(response.length > 0)
+            return res.status(200).json(response)
+        else
+            return res.status(404).json('No messages!')
+
+    } catch (err) {
+        return res.status(500).json(err)
+    }
+}
+
+export const readMessage = async (req, res) => {
+    try {
+
+        console.log(req.body.message_id)
+
+        let session = await create_session();
+        await session.run(`MATCH (u:User)-[r:USER_MESSAGE]->(m:Message) WHERE ID(r) = ${req.body.message_id} SET r.read = True RETURN r`).then(r => {
+            session.close()
+        })
+
+        return res.status(200).json('Ok!')
+
+    } catch (err) {
+        return res.status(500).json(err)
     }
 }

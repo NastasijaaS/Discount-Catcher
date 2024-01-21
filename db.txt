@@ -1,0 +1,158 @@
+CREATE (u: User {email: "admin@gmail.com", is_admin: true, name: "Admin", last_name: "Admin", password: "admin"})
+CREATE (u: User {email: "david@gmail.com", is_admin: false, name: "David", last_name: "Marinkovic", password: "david"})
+CREATE (u: User {email: "katarina@gmail.com", is_admin: false, name: "Katarina", last_name: "Stanojkovic", password: "katarina"})
+CREATE (u: User {email: "nastasija@gmail.com", is_admin: false, name: "Nastasija", last_name: "Stankovic", password: "nastasija"})
+
+CREATE (t: Type {name: "Pica"})
+CREATE (t: Type {name: "Namirnice"})
+CREATE (t: Type {name: "Odeca"})
+CREATE (t: Type {name: "Obuca"})
+
+CREATE (b: Brand {name: "Haribo"})
+CREATE (b: Brand {name: "Proteini.si"})
+CREATE (b: Brand {name: "Bambi"})
+CREATE (b: Brand {name: "Guarana"})
+CREATE (b: Brand {name: "Puma"})
+CREATE (b: Brand {name: "Nike"})
+CREATE (b: Brand {name: "Adidas"})
+CREATE (b: Brand {name: "Jacobs"})
+
+CREATE (s: Store {name: "Idea", address: "Jovana Ristica 30"})
+CREATE (s: Store {name: "Merkator", address: "Narodnih Heroja 12"})
+CREATE (s: Store {name: "Puma", address: "Trg Kralja Aleksandra 4"})
+
+CREATE (l: Location {name: "Nis"})
+CREATE (l: Location {name: "Leskovac"})
+CREATE (l: Location {name: "Beograd"})
+
+CREATE (p: Product {image: "/assets/products/Adidas Camo Infill Tee.png", name: "Adidas Camo Infill Tee", type: "Odeca",brand: "Adidas"})
+CREATE (p: Product {image: "/assets/products/NIKE Paris Saint-Germain.png", name: "NIKE Paris Saint-Germain", type: "Odeca", brand: "Nike"})
+CREATE (p: Product {image: "/assets/products/Guarana NoSleep 0,25l.png", name: "Guarana NoSleep 0,25l", type: "Pica", brand: "Guarana"})
+CREATE (p: Product {image: "/assets/products/Goldbaren Haribo 200g.png", name: "Goldbaren Haribo 200g", type: "Namirnice", brand: "Haribo"})
+CREATE (p: Product {image: "/assets/products/Haribo Softbarc.100g.png", name: "Haribo Softbarc.100g", type: "Namirnice", brand: "Haribo"})
+CREATE (p: Product {image: "/assets/products/Adidas Dukserica.png", name: "Adidas Dukserica", type: "Odeca", brand: "Adidas"})
+CREATE (p: Product {image: "/assets/products/PUMA Dukserica SWXP.png", name: "PUMA Dukserica SWXP", type: "Odeca", brand: "Puma"})
+CREATE (p: Product {image: "/assets/products/Proteini.si Jagoda 500g.png", name: "Proteini.si Jagoda 500g", type: "Namirnice", brand: "Proteini.si"})
+CREATE (p: Product {image: "/assets/products/NIKE Patike Air Force 1 ’07 LV82.png", name: "NIKE Patike Air Force 1 ’07 LV82", type: "Obuca", brand: "Nike"})
+CREATE (p: Product {image: "/assets/products/Adidas RETROPY F2.png", name: "Adidas RETROPY F2", type: "Obuca", brand: "Adidas"})
+CREATE (p: Product {image: "/assets/products/Puma RS-Z.png", name: "Puma RS-Z", type: "Obuca", brand: "Puma"})
+CREATE (p: Product {image: "/assets/products/Haribo Happy cola 100g.png", name: "Haribo Happy cola 100g", type: "Namirnice", brand: "Haribo"})
+CREATE (p: Product {image: "/assets/products/Instant Cronat Gold Jacobs 100g.png", name: "Instant Cronat Gold Jacobs 100g", type: "Pica", brand: "Jacobs"})
+CREATE (p: Product {image: "/assets/products/Keks Plazma 600g.png", name: "Keks Plazma 600g", type: "Namirnice", brand: "Bambi"})
+CREATE (p: Product {image: "/assets/products/Guarana Brainer 0,25l.png", name: "Guarana Brainer 0,25l", type: "Pica", brand: "Guarana"})
+CREATE (p" Product {image: "/assets/products/Adidas Originals Superstar.png", name: "Adidas Originals Superstar", type: "Obuca", brand: "Adidas"})
+
+MATCH (p:Product WHERE p.name = "Adidas Camo Infill Tee"), (b:Brand WHERE b.name = "Adidas") CREATE (b)-[r:HAS_PRODUCT_BRAND]->(p)
+MATCH (p:Product WHERE p.name = "Adidas Camo Infill Tee"), (t:Type WHERE t.name = "Odeca") CREATE (t)-[r:HAS_PRODUCT_TYPE]->(p)
+
+MATCH (p:Product WHERE p.name = "NIKE Paris Saint-Germain"), (b:Brand WHERE b.name = "Nike") CREATE (b)-[r:HAS_PRODUCT_BRAND]->(p)
+MATCH (p:Product WHERE p.name = "NIKE Paris Saint-Germain"), (t:Type WHERE t.name = "Odeca") CREATE (t)-[r:HAS_PRODUCT_TYPE]->(p)
+
+MATCH (p:Product WHERE p.name = "Guarana NoSleep 0,25l"), (b:Brand WHERE b.name = "Guarana") CREATE (b)-[r:HAS_PRODUCT_BRAND]->(p)
+MATCH (p:Product WHERE p.name = "Guarana NoSleep 0,25l"), (t:Type WHERE t.name = "Pica") CREATE (t)-[r:HAS_PRODUCT_TYPE]->(p)
+
+MATCH (p:Product WHERE p.name = "Goldbaren Haribo 200g"), (b:Brand WHERE b.name = "Haribo") CREATE (b)-[r:HAS_PRODUCT_BRAND]->(p)
+MATCH (p:Product WHERE p.name = "Goldbaren Haribo 200g"), (t:Type WHERE t.name = "Namirnice") CREATE (t)-[r:HAS_PRODUCT_TYPE]->(p)
+
+MATCH (p:Product WHERE p.name = "Haribo Softbarc.100g"), (b:Brand WHERE b.name = "Haribo") CREATE (b)-[r:HAS_PRODUCT_BRAND]->(p)
+MATCH (p:Product WHERE p.name = "Haribo Softbarc.100g"), (t:Type WHERE t.name = "Namirnice") CREATE (t)-[r:HAS_PRODUCT_TYPE]->(p)
+
+MATCH (p:Product WHERE p.name = "Adidas Dukserica"), (b:Brand WHERE b.name = "Adidas") CREATE (b)-[r:HAS_PRODUCT_BRAND]->(p)
+MATCH (p:Product WHERE p.name = "Adidas Dukserica"), (t:Type WHERE t.name = "Odeca") CREATE (t)-[r:HAS_PRODUCT_TYPE]->(p)
+
+MATCH (p:Product WHERE p.name = "PUMA Dukserica SWXP"), (b:Brand WHERE b.name = "Puma") CREATE (b)-[r:HAS_PRODUCT_BRAND]->(p)
+MATCH (p:Product WHERE p.name = "PUMA Dukserica SWXP"), (t:Type WHERE t.name = "Odeca") CREATE (t)-[r:HAS_PRODUCT_TYPE]->(p)
+
+MATCH (p:Product WHERE p.name = "Proteini.si Jagoda 500g"), (b:Brand WHERE b.name = "Proteini.si") CREATE (b)-[r:HAS_PRODUCT_BRAND]->(p)
+MATCH (p:Product WHERE p.name = "Proteini.si Jagoda 500g"), (t:Type WHERE t.name = "Namirnice") CREATE (t)-[r:HAS_PRODUCT_TYPE]->(p)
+
+MATCH (p:Product WHERE p.name = "NIKE Patike Air Force 1 ’07 LV82"), (b:Brand WHERE b.name = "Nike") CREATE (b)-[r:HAS_PRODUCT_BRAND]->(p)
+MATCH (p:Product WHERE p.name = "NIKE Patike Air Force 1 ’07 LV82"), (t:Type WHERE t.name = "Obuca") CREATE (t)-[r:HAS_PRODUCT_TYPE]->(p)
+
+MATCH (p:Product WHERE p.name = "Adidas RETROPY F2"), (b:Brand WHERE b.name = "Adidas") CREATE (b)-[r:HAS_PRODUCT_BRAND]->(p)
+MATCH (p:Product WHERE p.name = "Adidas RETROPY F2"), (t:Type WHERE t.name = "Obuca") CREATE (t)-[r:HAS_PRODUCT_TYPE]->(p)
+
+MATCH (p:Product WHERE p.name = "Puma RS-Z"), (b:Brand WHERE b.name = "Puma") CREATE (b)-[r:HAS_PRODUCT_BRAND]->(p)
+MATCH (p:Product WHERE p.name = "Puma RS-Z"), (t:Type WHERE t.name = "Obuca") CREATE (t)-[r:HAS_PRODUCT_TYPE]->(p)
+
+MATCH (p:Product WHERE p.name = "Haribo Happy cola 100g"), (b:Brand WHERE b.name = "Haribo") CREATE (b)-[r:HAS_PRODUCT_BRAND]->(p)
+MATCH (p:Product WHERE p.name = "Haribo Happy cola 100g"), (t:Type WHERE t.name = "Namirnice") CREATE (t)-[r:HAS_PRODUCT_TYPE]->(p)
+
+MATCH (p:Product WHERE p.name = "Instant Cronat Gold Jacobs 100g"), (b:Brand WHERE b.name = "Jacobs") CREATE (b)-[r:HAS_PRODUCT_BRAND]->(p)
+MATCH (p:Product WHERE p.name = "Instant Cronat Gold Jacobs 100g"), (t:Type WHERE t.name = "Pica") CREATE (t)-[r:HAS_PRODUCT_TYPE]->(p)
+
+MATCH (p:Product WHERE p.name = "Keks Plazma 600g"), (b:Brand WHERE b.name = "Bambi") CREATE (b)-[r:HAS_PRODUCT_BRAND]->(p)
+MATCH (p:Product WHERE p.name = "Keks Plazma 600g"), (t:Type WHERE t.name = "Namirnice") CREATE (t)-[r:HAS_PRODUCT_TYPE]->(p)
+
+MATCH (p:Product WHERE p.name = "Guarana Brainer 0,25l"), (b:Brand WHERE b.name = "Guarana") CREATE (b)-[r:HAS_PRODUCT_BRAND]->(p)
+MATCH (p:Product WHERE p.name = "Guarana Brainer 0,25l"), (t:Type WHERE t.name = "Pica") CREATE (t)-[r:HAS_PRODUCT_TYPE]->(p)
+
+MATCH (p:Product WHERE p.name = "Adidas Originals Superstar"), (b:Brand WHERE b.name = "Adidas") CREATE (b)-[r:HAS_PRODUCT_BRAND]->(p)
+MATCH (p:Product WHERE p.name = "Adidas Originals Superstar"), (t:Type WHERE t.name = "Obuca") CREATE (t)-[r:HAS_PRODUCT_TYPE]->(p)
+
+MATCH (l:Location WHERE l.name = "Nis"), (s:Store WHERE s.name = "Idea") CREATE (l)-[r:ON_LOCATION]->(s)
+MATCH (l:Location WHERE l.name = "Nis"), (s:Store WHERE s.name = "Puma") CREATE (l)-[r:ON_LOCATION]->(s)
+MATCH (l:Location WHERE l.name = "Nis"), (s:Store WHERE s.name = "Merkator") CREATE (l)-[r:ON_LOCATION]->(s)
+MATCH (l:Location WHERE l.name = "Beograd"), (s:Store WHERE s.name = "Idea") CREATE (l)-[r:ON_LOCATION]->(s)
+MATCH (l:Location WHERE l.name = "Beograd"), (s:Store WHERE s.name = "Merkator") CREATE (l)-[r:ON_LOCATION]->(s)
+MATCH (l:Location WHERE l.name = "Leskovac"), (s:Store WHERE s.name = "Idea") CREATE (l)-[r:ON_LOCATION]->(s)
+MATCH (l:Location WHERE l.name = "Leskovac"), (s:Store WHERE s.name = "Merkator") CREATE (l)-[r:ON_LOCATION]->(s)
+
+MATCH (p:Product WHERE p.name = "Adidas Camo Infill Tee"), (s:Store WHERE s.name = "Puma") MERGE (p)-[r:IN_STORE{price: 3500}]->(s)
+MATCH (p:Product WHERE p.name = "Adidas Camo Infill Tee"), (s:Store WHERE s.name = "Puma") MERGE (s)-[r:HAS_PRODUCT{price: 3500}]->(p)
+
+MATCH (p:Product WHERE p.name = "NIKE Paris Saint-Germain"), (s:Store WHERE s.name = "Puma") MERGE (p)-[r:IN_STORE{price: 15000}]->(s)
+MATCH (p:Product WHERE p.name = "NIKE Paris Saint-Germain"), (s:Store WHERE s.name = "Puma") MERGE (s)-[r:HAS_PRODUCT{price: 15000}]->(p)
+
+MATCH (p:Product WHERE p.name = "Adidas Dukserica"), (s:Store WHERE s.name = "Puma") MERGE (p)-[r:IN_STORE{price: 4500}]->(s)
+MATCH (p:Product WHERE p.name = "Adidas Dukserica"), (s:Store WHERE s.name = "Puma") MERGE (s)-[r:HAS_PRODUCT{price: 4500}]->(p)
+
+MATCH (p:Product WHERE p.name = "PUMA Dukserica SWXP"), (s:Store WHERE s.name = "Puma") MERGE (p)-[r:IN_STORE{price: 5500}]->(s)
+MATCH (p:Product WHERE p.name = "PUMA Dukserica SWXP"), (s:Store WHERE s.name = "Puma") MERGE (s)-[r:HAS_PRODUCT{price: 5500}]->(p)
+
+MATCH (p:Product WHERE p.name = "Puma RS-Z"), (s:Store WHERE s.name = "Puma") MERGE (p)-[r:IN_STORE{price: 7450}]->(s)
+MATCH (p:Product WHERE p.name = "Puma RS-Z"), (s:Store WHERE s.name = "Puma") MERGE (s)-[r:HAS_PRODUCT{price: 7450}]->(p)
+
+MATCH (p:Product WHERE p.name = "Adidas Originals Superstar"), (s:Store WHERE s.name = "Puma") MERGE (p)-[r:IN_STORE{price: 8500}]->(s)
+MATCH (p:Product WHERE p.name = "Adidas Originals Superstar"), (s:Store WHERE s.name = "Puma") MERGE (s)-[r:HAS_PRODUCT{price: 8500}]->(p)
+
+MATCH (p:Product WHERE p.name = "Guarana NoSleep 0,25l"), (s:Store WHERE s.name = "Idea") MERGE (p)-[r:IN_STORE{price: 75}]->(s)
+MATCH (p:Product WHERE p.name = "Guarana NoSleep 0,25l"), (s:Store WHERE s.name = "Idea") MERGE (s)-[r:HAS_PRODUCT{price: 75}]->(p)
+
+MATCH (p:Product WHERE p.name = "Guarana NoSleep 0,25l"), (s:Store WHERE s.name = "Merkator") MERGE (p)-[r:IN_STORE{price: 90}]->(s)
+MATCH (p:Product WHERE p.name = "Guarana NoSleep 0,25l"), (s:Store WHERE s.name = "Merkator") MERGE (s)-[r:HAS_PRODUCT{price: 90}]->(p)
+
+MATCH (p:Product WHERE p.name = "Goldbaren Haribo 200g"), (s:Store WHERE s.name = "Idea") MERGE (p)-[r:IN_STORE{price: 150}]->(s)
+MATCH (p:Product WHERE p.name = "Goldbaren Haribo 200g"), (s:Store WHERE s.name = "Idea") MERGE (s)-[r:HAS_PRODUCT{price: 150}]->(p)
+
+MATCH (p:Product WHERE p.name = "Haribo Softbarc.100g"), (s:Store WHERE s.name = "Idea") MERGE (p)-[r:IN_STORE{price: 220}]->(s)
+MATCH (p:Product WHERE p.name = "Haribo Softbarc.100g"), (s:Store WHERE s.name = "Idea") MERGE (s)-[r:HAS_PRODUCT{price: 220}]->(p)
+
+MATCH (p:Product WHERE p.name = "Haribo Softbarc.100g"), (s:Store WHERE s.name = "Merkator") MERGE (p)-[r:IN_STORE{price: 200}]->(s)
+MATCH (p:Product WHERE p.name = "Haribo Softbarc.100g"), (s:Store WHERE s.name = "Merkator") MERGE (s)-[r:HAS_PRODUCT{price: 200}]->(p)
+
+MATCH (p:Product WHERE p.name = "Proteini.si Jagoda 500g"), (s:Store WHERE s.name = "Idea") MERGE (p)-[r:IN_STORE{price: 855}]->(s)
+MATCH (p:Product WHERE p.name = "Proteini.si Jagoda 500g"), (s:Store WHERE s.name = "Idea") MERGE (s)-[r:HAS_PRODUCT{price: 855}]->(p)
+
+MATCH (p:Product WHERE p.name = "Proteini.si Jagoda 500g"), (s:Store WHERE s.name = "Merkator") MERGE (p)-[r:IN_STORE{price: 910}]->(s)
+MATCH (p:Product WHERE p.name = "Proteini.si Jagoda 500g"), (s:Store WHERE s.name = "Merkator") MERGE (s)-[r:HAS_PRODUCT{price: 910}]->(p)
+
+MATCH (p:Product WHERE p.name = "Instant Cronat Gold Jacobs 100g"), (s:Store WHERE s.name = "Merkator") MERGE (p)-[r:IN_STORE{price: 675}]->(s)
+MATCH (p:Product WHERE p.name = "Instant Cronat Gold Jacobs 100g"), (s:Store WHERE s.name = "Merkator") MERGE (s)-[r:HAS_PRODUCT{price: 675}]->(p)
+
+MATCH (p:Product WHERE p.name = "Keks Plazma 600g"), (s:Store WHERE s.name = "Idea") MERGE (p)-[r:IN_STORE{price: 450}]->(s)
+MATCH (p:Product WHERE p.name = "Keks Plazma 600g"), (s:Store WHERE s.name = "Idea") MERGE (s)-[r:HAS_PRODUCT{price: 450}]->(p)
+
+MATCH (p:Product WHERE p.name = "Guarana Brainer 0,25l"), (s:Store WHERE s.name = "Idea") MERGE (p)-[r:IN_STORE{price: 92}]->(s)
+MATCH (p:Product WHERE p.name = "Guarana Brainer 0,25l"), (s:Store WHERE s.name = "Idea") MERGE (s)-[r:HAS_PRODUCT{price: 92}]->(p)
+
+MATCH (p:Product WHERE p.name = "Guarana Brainer 0,25l"), (s:Store WHERE s.name = "Merkator") MERGE (p)-[r:IN_STORE{price: 85}]->(s)
+MATCH (p:Product WHERE p.name = "Guarana Brainer 0,25l"), (s:Store WHERE s.name = "Merkator") MERGE (s)-[r:HAS_PRODUCT{price: 85}]->(p)
+
+MATCH (s:Store), (p:Product) WHERE s.name = "Idea" AND p.name = "Guarana NoSleep 0,25l" MERGE (s)-[r:HAS_DISCOUNT]->(p) ON CREATE SET r.price = 65 ON MATCH SET r.price = 65
+MATCH (s:Store), (p:Product) WHERE s.name = "Idea" AND p.name = "Haribo Softbarc.100g" MERGE (s)-[r:HAS_DISCOUNT]->(p) ON CREATE SET r.price = 200 ON MATCH SET r.price = 200
+MATCH (s:Store), (p:Product) WHERE s.name = "Puma" AND p.name = "NIKE Paris Saint-Germain" MERGE (s)-[r:HAS_DISCOUNT]->(p) ON CREATE SET r.price = 12000 ON MATCH SET r.price = 12000
+MATCH (s:Store), (p:Product) WHERE s.name = "Idea" AND p.name = "Goldbaren Haribo 200g" MERGE (s)-[r:HAS_DISCOUNT]->(p) ON CREATE SET r.price = 140 ON MATCH SET r.price = 140
+MATCH (s:Store), (p:Product) WHERE s.name = "Merkator" AND p.name = "Proteini.si Jagoda 500g" MERGE (s)-[r:HAS_DISCOUNT]->(p) ON CREATE SET r.price = 850 ON MATCH SET r.price = 850
+MATCH (s:Store), (p:Product) WHERE s.name = "Merkator" AND p.name = "Instant Cronat Gold Jacobs 100g" MERGE (s)-[r:HAS_DISCOUNT]->(p) ON CREATE SET r.price = 500 ON MATCH SET r.price = 500
+

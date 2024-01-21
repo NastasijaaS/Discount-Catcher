@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router()
 
-import { createStore, getAllStores, addProductToStore, addProductToDiscount, addLocationToStore, getAllStoresByLocation, getProductsFromStore } from "../Controllers/store.js";
+import { createStore, getAllStores, addProductToStore, addProductToDiscount, addLocationToStore, getAllStoresByLocation, getProductsFromStore, removeDiscount } from "../Controllers/store.js";
 
 // Get
 router.get('/getAllStores', getAllStores)
@@ -15,7 +15,7 @@ router.post('/getProductsFromStore', getProductsFromStore)
 router.put('/addProduct', addProductToStore)
 router.put('/addProductToDiscount', addProductToDiscount)
 router.put('/addLocationToStore', addLocationToStore)
-
+router.put('/removeDiscount', removeDiscount)
 
 
 // Delete

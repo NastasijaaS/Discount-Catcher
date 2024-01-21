@@ -20,19 +20,14 @@ export default function Stores() {
     setStore(result.data)
   }
 
-  const fetch_products = async (name) => {
-    const result = await getProductsFromStore({store_name: name})
-    setProducts(result.data)
-  }
-
   useEffect(() => {
     fetch_stores()
   }, [])
 
-  useEffect(() => {
-    // console.log('nesto123')
-    fetch_products()
-  }, [selectedStore])
+  // useEffect(() => {
+  //   // console.log('nesto123')
+  //   fetch_products()
+  // }, [selectedStore])
 
   useEffect(() => {
     console.log("Product list changed: ", products)
@@ -47,7 +42,7 @@ export default function Stores() {
                   {
                     stores.map(x => {
                         return (
-                          <Store_card data={{store_info: x, func: fetch_products}} />
+                          <Store_card data={{store_info: x, func: setProducts}} />
                         )
                     })
                   }

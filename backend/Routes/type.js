@@ -1,10 +1,10 @@
 import express from "express";
 const router = express.Router()
 
-import { createType } from "../Controllers/type.js";
+import { createType, getAllTypes } from "../Controllers/type.js";
 
 // Get
-
+router.get('/getAllTypes', getAllTypes)
 
 // Post
 router.post('/create', createType)

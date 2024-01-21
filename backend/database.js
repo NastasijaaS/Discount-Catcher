@@ -16,10 +16,13 @@ export const create_session = async () => {
     return session
 }
 
-//export const connection = createClient(`redis://localhost:8001`)
-//await connection.connect()
+export const connection = createClient(`redis://localhost:6379`)
+connection.on('connect', () => {
+    console.log('redis client connected!')
+})
+await connection.connect()
 
-//export const redis_client = await new Client().use(connection)
+export const redis_client = await new Client().use(connection)
 
 // export const create_client = async () => {
 //     if (!redis_client.isOpen()) {

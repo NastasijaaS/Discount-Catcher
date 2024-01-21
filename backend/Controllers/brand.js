@@ -28,11 +28,17 @@ export const createBrand = async (req, res) => {
 export const getAllBrands = async (req, res) => {
     try {
 
-        let response = null
+        let response = []
         
         const session = await create_session()
         await session.run('MATCH (s:Brand) RETURN s LIMIT 25').then(r => {
-            response = r.records.map(x => { return x.get('s').properties })
+            // response = r.records.map(x => { return x.get('s').properties })
+            r.records.map(x => {
+                let brand_obj = x.get('s').properties
+                brand_obj.brand_id = x.get('s').identity['low']
+
+                response.push(brand_obj)
+            })
             session.close()
         })
         if (response.length != 0)

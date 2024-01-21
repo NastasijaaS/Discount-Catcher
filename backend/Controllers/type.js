@@ -24,3 +24,30 @@ export const createType = async (req, res) => {
         return res.status(500).json(err)
     }
 }
+
+export const getAllTypes = async (req, res) => {
+    try {
+
+        let response = []
+
+        let session = await create_session();
+        await session.run(`MATCH (t:Type) RETURN t AS type`).then(r => {
+            r.records.map(x => {
+                let type_obj = x.get('type').properties
+                type_obj.type_id = x.get('type').identity['low']
+
+                response.push(type_obj)
+            })
+
+            session.close();
+        })
+
+        if(response.length > 0)
+            return res.status(200).json(response)
+        else 
+            return res.status(400).json('Nema ni jednog tipa u bazi podataka!')
+
+    } catch (err) {
+        return res.status(500).json(err)
+    }
+}

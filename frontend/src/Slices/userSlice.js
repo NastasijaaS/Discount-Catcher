@@ -6,7 +6,8 @@ const initialState = {
     last_name: null,
     intrested_in_products: [],
     intrested_in_stores: [],
-    intrested_in_brands: []
+    intrested_in_brands: [],
+    is_admin: null
 }
 
 export const userSlice = createSlice({
@@ -14,9 +15,13 @@ export const userSlice = createSlice({
     initialState,
     reducers: {
         login: (state, action) => {
-            state.id = action.payload
+            console.log('store got data: ', action.payload)
+            state.id = action.payload.user_id
+            state.name = action.payload.name
+            state.is_admin = action.payload.is_admin
         },
         register:(state,action)=>{
+            state.id = action.payload.user_id
             state.name=action.payload.name
             state.last_name=action.payload.last_name
             state.email=action.payload.email

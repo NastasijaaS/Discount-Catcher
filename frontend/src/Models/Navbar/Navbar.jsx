@@ -7,7 +7,7 @@ import { log_out } from '../../Slices/userSlice.js'
 
 export default function Navbar() {
     
-    const navigation_list = [['Akcije', 'fa-solid fa-percent'], ['Namirnice', 'fa-solid fa-burger'], ['Odeca', 'fa-solid fa-shirt'], ['Obuca', 'fa-solid fa-shoe-prints'], ['Pica', 'fa-solid fa-mug-hot']]
+    const navigation_list = [['Prodavnice', 'fa-solid fa-store'], ['Namirnice', 'fa-solid fa-burger'], ['Odeca', 'fa-solid fa-shirt'], ['Obuca', 'fa-solid fa-shoe-prints'], ['Pica', 'fa-solid fa-mug-hot']]
     const navigate = useNavigate()
     const dispatch = useDispatch();
     
@@ -25,7 +25,7 @@ export default function Navbar() {
             case 'register':
                 navigate('/register')
                 break
-            case 'Akcije':
+            case 'Prodavnice':
                 navigate('/prodavnice')
                 break
             case 'my_products':
@@ -36,6 +36,9 @@ export default function Navbar() {
                 dispatch(log_out())
                 console.log(user)
                 navigate('/')
+                break
+            case 'messages':
+                navigate('/messages')
                 break
             default: {
                 navigate('/proizvodi', {state: button})
@@ -76,6 +79,7 @@ export default function Navbar() {
                             <div className="login_div">
                                 <button id='my_products' className="my_products_button" onClick={handleNavigate}>My products</button>
                                 <button id='log_out' className="log_out_button" onClick={handleNavigate}>Log out</button>
+                                <button id='messages' className="user_messages_button" onClick={handleNavigate}><i className='fa-solid fa-message'/></button>
                             </div>
                         </>
                     )

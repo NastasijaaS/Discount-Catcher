@@ -13,6 +13,7 @@ import Store_card from './Store card/Store_card'
 export default function User_items() {
 
   const [products, setProducts] = useState([])
+  const [result, setResult] = useState([])
   const [filter, setFilter] = useState('product')
   let user = useSelector(state => state.user);
 
@@ -45,13 +46,16 @@ export default function User_items() {
     switch(filter) {
       case 'product':
         fetch_products()
+        setResult([])
         break;
-      case 'stores':
-        fetch_stores()
-        break;
-      case 'brand':
-        fetch_brands()
-        break;
+      // case 'stores':
+      //   fetch_stores()
+      //   setResult([])
+      //   break;
+      // case 'brand':
+      //   fetch_brands()
+      //   setResult([])
+      //   break;
       default:
         break;
     }
@@ -59,40 +63,40 @@ export default function User_items() {
 
   if(products.length > 0) {
     return (
-        <>
+        <div className='user_items_main_container'>
           <Filter filter_event={setFilter}/>
-          {
+          <div className="result_container">
             {
-              'product': products.map(x => {
+              {
+                'product': products.map(x => {
+                  return (
+                    <Product product_data={x}/>
+                  )
+                }),
+                // 'brand': products.map(x => {
+                //   console.log(x)
+                //   return (
+                //     <Brand brand_data={{data: x, func: setResult}}/>
+                //   )
+                // }),
+                // 'stores': products.map(x => {
+                //   return (
+                //     <Store_card store_data={{data: x, func: setResult}}/>
+                //   )
+                // })
+              }[filter]
+            }
+          </div>
+          <div className="final_result_container">
+            {
+              (result) && (result.map(x => {
                 return (
                   <Product product_data={x}/>
                 )
-              }),
-              'brand': products.map(x => {
-                console.log(x)
-                return (
-                  <Brand brand_data={x}/>
-                )
-              }),
-              'stores': products.map(x => {
-                return (
-                  <Store_card store_data={x}/>
-                )
-              })
-            }[filter]
-            // switch(filter) {
-            //   case "product":
-            //     products.map(x => {
-            //       return (
-            //         <Product product_data={x}/>
-            //         )
-            //     })
-            //     break;   
-            //   default: 
-            //     break;
-            // }
-          }
-        </>
+              }))
+            }
+          </div>
+        </div>
     )
   }
 

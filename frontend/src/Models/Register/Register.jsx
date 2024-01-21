@@ -1,23 +1,26 @@
 import React from 'react'
 import './register.css'
 
-import { useDispatch, useSelector } from 'react-redux'
-
 import { userSlice, register } from '../../Slices/userSlice.js';
 import { registerIN } from '../../Axios/Axios.js';
+
+import { useDispatch, useSelector } from 'react-redux'
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'
+
+
 
 export default function Register() {
 
     let user = useSelector(state => state.user);
     const dispatch = useDispatch();
     const [data, setData] = useState({name: "", last_name: "",email: "",password:""})
-  //   const [user_data, setUser] = useState({})
+
+    const navigate = useNavigate()
   
     const handleChange = ({currentTarget: input}) => {
       setData({...data, [input.name]: input.value })
-      //console.log('changing data!', input.value );
     }
   
     const register_user = async (data) => {
@@ -25,7 +28,8 @@ export default function Register() {
       const res = await registerIN(data);
       if(res) {
           dispatch(register(res.data));
-          console.log(res.data)
+          console.log('User data:', res.data)
+          navigate('/')
       }
     }
     return (

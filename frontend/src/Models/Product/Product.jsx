@@ -39,7 +39,7 @@ export default function Product({product_data}) {
     <>
         <div className='product_card'>
             <div className='product_card_container'>
-                <img className='product_image' src="../../resources/products/NIKE Patike Air Force 1 ’07 LV82.png" alt="" />
+                <img className='product_image' src={product_data.image} alt="no img :)" />
                 <div className='product_data'>
                     <div className='product_name'>Product: {product_data.name}</div>
                     <div className='product_brand'>Brand: {product_data.brand}</div>

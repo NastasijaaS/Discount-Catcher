@@ -127,3 +127,7 @@
 .product_store_price {
     font-style: italic;
 }
+
+.label_prices {
+    font-weight: 500;
+}

@@ -10,6 +10,9 @@ import Register from "./Models/Register/Register.jsx";
 import Product_list from "./Models/Product_list/Product_list.jsx";
 import Stores from "./Models/Prodavnice/Stores.jsx";
 import User_items from "./Models/User items/User_items.jsx";
+import Admin from "./Models/Admin/Admin.jsx"
+import Message_page from "./Models/Message_page/Message_page.jsx";
+import Message from "./Models/Message/Message.jsx";
 
 function App() {
   return (
@@ -23,6 +26,8 @@ function App() {
           <Route path='/proizvodi' element={<Product_list/> } />
           <Route path='/prodavnice' element={<Stores />} />
           <Route path='/my_products' element={<User_items />} />
+          <Route path='/admin' element={<Admin />} />
+          <Route path='/messages' element={<Message_page />} />
         </Routes>
       </Router>
     </>

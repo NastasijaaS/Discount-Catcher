@@ -1,7 +1,9 @@
 import { create_session } from '../database.js'
 import { store } from '../Models/store.js'
+import { message } from '../Models/message.js'
 
-//import { storeRepository } from '../Models/Redis/store.js'
+import { storeRepository } from '../Models/Redis/store.js'
+import { redis_client, connection } from '../database.js'
 
 export const createStore = async (req, res) => {
     try {
@@ -11,21 +13,36 @@ export const createStore = async (req, res) => {
         
         const session = await create_session()
         let response = null
+        let store_obj = {}
+        let store_id = null
         
         await session.run('CREATE (s:Store ' + new_store.toJson() + ') RETURN s AS store').then(r => {
             response = r.records[0].get('store').properties
-            response.id = r.records[0].get('store').identity['low']
+            store_id = r.records[0].get('store').identity['low']
+            store_obj=new_store
+            store_obj.store_id = store_id
             session.close()
         })
 
-        if (response) {
-
+        if (store_id) {
+            const ttlInSeconds = 60;
             const store = await storeRepository.createEntity({
-                ...response
+                ...store_obj
             })
-            storeRepository.save(store)
+            const redis_response = await storeRepository.search().return.all();
+            if(redis_response)
+            {
+                for (let i=0; i<redis_response.length; i++){
+                    await storeRepository.remove(redis_response[i].entityId)
+                    await storeRepository.save(redis_response[i])
+                    await redis_client.execute(['EXPIRE', `Store:${redis_response[i].entityId}`, ttlInSeconds]);               
+                }
+                console.log("resp " + redis_response)
 
-            return res.status(200).json(response)
+                await storeRepository.save(store)
+                await redis_client.execute(['EXPIRE', `Store:${store.entityId}`, ttlInSeconds]);
+            }
+            return res.status(200).json('Uspesno smo kreirali radnju: sa id-jem: ' + store_id)
         }
         else
             return res.status(400).json('Nismo uspeli da kreiramo prodavnicu :(')
@@ -163,10 +180,54 @@ export const addProductToDiscount = async (req, res) => {
             
             let response = null
             session = await create_session()
-            await session.run('MATCH (p:Product WHERE ID(p) = ' + product_id + '), (s:Store WHERE ID(s) = ' + store_id + ') MERGE (s)-[r:HAS_DISCOUNT{discount: '+discount+'}]->(p) RETURN r AS veza').then(r => {
+            await session.run(`MATCH (s:Store), (p:Product) WHERE ID(s) = ${store_id} AND ID(p) = ${product_id} MERGE (s)-[r:HAS_DISCOUNT]->(p) ON CREATE SET r.price = ${discount} ON MATCH SET r.price = ${discount} RETURN r AS veza`).then(r => {
                 response=r.records[0].get('veza').properties
                 session.close();
             })
+
+            // obavestavamo korisnike o popustu za dati proizvod:
+
+            let intrested_users_list = []
+            session = await create_session()
+            await session.run(`MATCH (u:User)-[r:INTERESTED_IN_PRODUCT]->(p:Product) WHERE ID(p) = ${product_id} RETURN u AS user`).then(r => {
+
+                r.records.map(x => {
+                    let intrested_user = x.get('user').properties
+                    intrested_user.user_id = x.get('user').identity['low']
+                    
+                    console.log('intrested user: ', intrested_user)
+
+                    intrested_users_list.push(intrested_user)
+                })
+
+                session.close();
+            })
+
+            if(intrested_users_list.length > 0) {
+
+                // let message = JSON.stringify({data: "Message 123", tag: [11]})
+                // await connection.publish("app:customer", message)
+
+                // jednom za sve trenutno prijavljene korisnike:
+                let mess = JSON.stringify({data: `Proizvod za koji ste zainteresovani: ${product_response.name} je na akciji u prodavnici: ${store_response.name}!`, tag: [product_id]})
+                await connection.publish("app:customer", mess)
+
+                console.log('obavestili smo korisnike (prijavljene)')
+                console.log('obavestavamo: ', intrested_users_list.length, 'korisnika preko poruka u bazi!')
+                
+                // kreiramo poruku i vezemo za sve korisnike u bazi:
+                for(let i = 0; i < intrested_users_list.length; i++) {
+                    const msg = new message(`Postovani: ${intrested_users_list[i].name}, proizvod koji pratite: ${product_response.name} je na akciji u prodavnici: ${store_response.name}!`)
+                    
+                    console.log('kreirali smo poruku: ', msg.toJson())
+                    console.log('Sending: ', `MATCH (u:User WHERE ID(u) = ${intrested_users_list[i].user_id}) CREATE (u)-[r:USER_MESSAGE {read: False}]->(m:Message ${msg.toJson()})`)
+                    session = await create_session()
+                    await session.run(`MATCH (u:User WHERE ID(u) = ${intrested_users_list[i].user_id}) CREATE (u)-[r:USER_MESSAGE {read: False, type: 'Product', object_id: ${product_id}}]->(m:Message ${msg.toJson()}) RETURN r AS veza`).then(r => {
+                        console.log(r.records.get('veza').properties)
+                        session.close()
+                    })
+                }
+            }
 
             return res.status(200).json(response)
         }
@@ -232,11 +293,35 @@ export const getAllStoresByLocation = async (req, res) => {
         console.log(location_id)
         const session = await create_session()
         await session.run('MATCH (l:Location)-[:ON_LOCATION]->(s:Store) WHERE l.name= \''+location_id+'\' RETURN s AS store').then(r => {
-            response = r.records.map(x => { return x.get('store').properties })
+            response = r.records.map(x => { 
+                let store_obj = x.get('store').properties 
+                store_obj.store_id = x.get('p').identity['low']
+                const ttlInSeconds = 5 * 60;
+                const store = storeRepository.createEntity({
+                    ...store_obj
+                })
+                storeRepository.save(store)
+                storeRepository.expire(store.id, ttlInSeconds)
+                
+                return store_obj
+            })
             session.close()
         })
         if (response.length != 0)
+        {
+            const ttlInSeconds = 60;
+            for(let i = 0; i < response.length; i++) {
+                const redis_product = await storeRepository.createEntity({
+                        ...response[i]
+                })
+                await storeRepository.save(redis_product)
+                await redis_client.execute(['EXPIRE', `Store:${redis_product.entityId}`, ttlInSeconds]);
+                console.log('Seting expire: ', redis_cache[i].entityId)
+            }
+
+
             return res.status(200).json(response)
+        }
         else
             return res.status(404).json('Nema nijedne prodavnice na toj lokaciji!')
 
@@ -257,8 +342,8 @@ export const getProductsFromStore = async (req, res) => {
 
             r.records.map(x => {
                 let obj = x.get('product').properties
+                obj.product_id = x.get('product').identity['low']
                 obj.price = x.get('veza').properties['price']['low']
-                obj.discount = x.get('veza').properties['discount']['low']
 
                 response.push(obj)
             })
@@ -267,9 +352,30 @@ export const getProductsFromStore = async (req, res) => {
         })
 
         if (response.length !== 0)
+        {
             return res.status(200).json(response)
+
+        }
         else
             return res.status(404).json('Nema nijednog proizvoda u toj prodavnici!')
+
+    } catch (err) {
+        return res.status(500).json(err)
+    }
+}
+
+export const removeDiscount = async (req, res) => {
+    try {
+
+        const store_id = req.body['store_id']
+        const product_id = req.body['product_id']
+
+        let session = await create_session();
+        await session.run(`MATCH (s:Store)-[r:HAS_DISCOUNT]->(p:Product) WHERE ID(s)=${store_id} AND ID(p)=${product_id} DETACH DELETE r`).then(r => {
+            session.close()
+        })
+
+        return res.status(200).json('Veza uspesno obrisana!')
 
     } catch (err) {
         return res.status(500).json(err)

@@ -1,9 +1,3 @@
-// module.exports = {
-//     name: {
-//         type: 'string',
-//         unique: 'true'
-//     }
-// }
 
 export const type = class Type {
     constructor(name) {

@@ -1,0 +1,28 @@
+REDIS:
+    Za projekat je koriscena mala modifikacija redis-a, koji mozemo da instaliramo na docker komandom:
+    (*) docker run -d --name redis-stack-server -p 6379:6379 redis/redis-stack-server:latest
+    Pre pokretanja aplikacije, potrebno je samo pokrenuti kontejner.
+
+Neo4j:
+    Pored ovog fajla, nalazi se fajl db.txt u kome se nalaze naredbe da kreiranje i povezivanje objekta u bazi.
+    Prilikom razvijanja aplikacije koristili smo Neo4j Desktop aplikaciju i Neo4j Community Server,
+        (*) pokretanje Neo4j desktop aplikacije je jednostavno, kreiramo ime baze, dodamo nas username i password i pokrenemo instancu, a zatim koriscenjem Neo4j Browser-a mozemo da popunimo bazu
+        (*) pokretanje Neo4j Community Server-a se radi tako sto se poziciramo unutar: \neo4j-community-5.3.0-windows\neo4j-community-5.3.0\bin , otvorimo konzolu u datom folderu i pokrenemo komandu: neo4j console
+    Pre pokretanja aplikacije, takodje je potrebno uveriti se da je pokrenuta i ova baza.
+    Takodje, unutar projekta u folderu ./backend/ nalazi se fajl .env u kome postavljamo username i password koji smo postavili prilikom kreiranja Neo4j baze podataka
+
+Pokretanje aplikacije:
+    (*) Prvo, potrebno je pokrenuti backend deo aplikacije, a to radimo tako sto se pozicioniramo unutar ./backend/ foldera, tu otvorimo konzolu i izvrsimo naredbu: "npm start"
+    (*) Nakon toga, otvaramo drugu konzolu unutar foldera ./frontend/ i ponovo izvrsavamo naredbu: "npm start"
+
+    (**) Pre svega toga, kako bi bili sigurni da su svi paketi instalirani, potrebno je i u ./backend i u ./frontend folderu, pre pokretanja aplikacija izvrsiti naredbu: "npm install", pa tek onda "npm start"
+
+    Nakon pokretanja frontend-a, na pretrazivacu ce se pokrenuti web-aplikacija gde nas docekuje homepage sa najnovijim popustima. Prilikom logovanja, ponekad je potrebno 2 puta kliknuti na login dugme,
+    jer iz nekog razloga se ne ucitaju svi podaci u redux-u nakon prvog klika. Ukoliko se ulogujemo kao admin, takodje je potrebno 2 puta kliknuti na login, nakon cega ce nas preusmetiri na kontrole koje su dostupne adminu.
+    Ukoliko se desi da slucajno izadjemo iz kontrole, mozemo uvek da se vratimo tako sto odemo na adresu: "http://localhost:3000/admin". 
+
+    Mozemo pokrenuti aplikaciju u normalnom modu, i mozemo otvoriti jos jednu u "incognito" modu, tako da mozemo uporedno da izvrsimo recimo dodavanje popusta za neki proizvod,
+    i kao korisnik da istovremeno dobijemo obavestenje na drugoj aplikaciji.
+
+
+

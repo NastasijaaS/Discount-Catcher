@@ -1,0 +1,83 @@
+.admin_controll_div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 1rem;
+}
+
+.inner_control_div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+
+    overflow-y: scroll;
+}
+
+.inner_control_div::-webkit-scrollbar {
+    display: none;
+}
+
+.controll_option {
+    display: flex;
+    flex: row;
+    align-items: center;
+    justify-content: center;
+
+    gap: 1rem;
+
+    background-color: #9895E8;
+    border-radius: 0.45rem;
+    padding: 1rem;
+
+
+    font-size: 1rem;
+    font-weight: 600;
+    width: 97%;
+}
+
+.admin_input {
+    border: none;
+    font-size: 1.2rem;
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+}
+
+.input_cont {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0.25rem;
+}
+
+option {
+    font-size: 1rem;
+}
+
+select {
+    font-size: 1rem;
+}
+
+.admin_button {
+    border: none;
+    padding: 0.5rem 0.75rem 0.5rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 0.45rem;
+    background-color: #7A77E1;
+
+    cursor: pointer;
+    transition: 0.4s ease-in-out;
+}
+
+.admin_button:hover {
+    scale: 1.1;
+}
+
+/* .controll_option > label {
+    font-size: 2rem;
+} */
+
